@@ -1,44 +1,48 @@
-# shortest_paths usage
+# Utilisation de shortest_paths
 
 Installation
 
-1. Create a virtual environment (recommended):
+1. Créez un environnement virtuel (recommandé) :
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate    # on Unix/macOS
-.venv\Scripts\activate      # on Windows (PowerShell)
+# activer sous macOS / Linux
+source .venv/bin/activate
+# activer sous Windows (PowerShell)
+.venv\Scripts\Activate.ps1
+# activer sous Windows (CMD)
+.venv\Scripts\activate.bat
 ```
 
-2. Install dependencies:
+2. Installez les dépendances :
 
 ```bash
 pip install -r shortest_paths/requirements.txt
 ```
 
-Running the examples
+Exécuter les exemples
 
-- Run the bundled tests/demo:
+- Lancer la démo / les tests intégrés :
 
 ```bash
 python -m shortest_paths.examples
 ```
 
-Using the library
+Utilisation depuis Python
 
-From Python code you can import and use the data structures and algorithms:
+Importez les structures et fonctions puis utilisez-les :
 
 ```python
 from shortest_paths import Graphe, dijkstra, bellman_ford, ford, floyd_warshall
 
 g = Graphe(4)
-g.ajouter_arc(0,1,4)
-# ... add arcs
+g.ajouter_arc(0, 1, 4)
+# ... ajouter des arcs
 distances, preds = dijkstra(g, 0)
 ```
 
-Files
+Fichiers principaux
 
-- `shortest_paths/graph.py` — Graphe class
-- `shortest_paths/algorithms.py` — implementations of algorithms
-- `shortest_paths/examples.py` — small demo and tests
+- `shortest_paths/graph.py` — classe `Graphe`
+- `shortest_paths/algorithms.py` — implémentations des algorithmes
+- `shortest_paths/examples.py` — démonstration et petits tests

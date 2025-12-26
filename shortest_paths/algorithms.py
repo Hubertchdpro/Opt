@@ -77,7 +77,7 @@ def bellman_ford(graphe: Graphe, s: int) -> Tuple[List[float], List[int], bool]:
 
 
 def ford(graphe: Graphe, s: int) -> Tuple[List[float], List[int], bool]:
-    """Variante optimisée (SPFA-like) nommée Ford dans le document."""
+    """Variante optimisée (similaire à SPFA) nommée Ford dans le document."""
     n = graphe.n
     lambda_vals = [float('inf')] * n
     lambda_vals[s] = 0

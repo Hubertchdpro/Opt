@@ -1,166 +1,197 @@
-# Usage Guide for Shortest Path Algorithms Implementation
+# Guide d'Utilisation de l'Implémentation des Algorithmes de Chemins les Plus Courts
 
-This guide explains how to use the complete implementation of shortest path algorithms extracted from the comprehensive report. The code is consolidated in `complete_code.py` and includes implementations of Dijkstra, Bellman-Ford, Ford, and Floyd-Warshall algorithms.
+Ce guide explique comment utiliser l'implémentation complète des algorithmes de chemins les plus courts extraite du rapport complet. Le code est consolidé dans `complete_code.py` et inclut les implémentations de Dijkstra, Bellman-Ford, Ford et Floyd-Warshall.
 
-## Table of Contents
+## Table des Matières
 
-1. [Prerequisites](#prerequisites)
+1. [Prérequis](#prerequisites)
 2. [Installation](#installation)
-3. [Running the Code](#running-the-code)
-4. [Using Individual Components](#using-individual-components)
-5. [Examples](#examples)
-6. [Output Interpretation](#output-interpretation)
-7. [Troubleshooting](#troubleshooting)
+3. [Exécution du Code](#running-the-code)
+4. [Utilisation des Composants Individuels](#using-individual-components)
+5. [Exemples](#examples)
+6. [Interprétation des Sorties](#output-interpretation)
+7. [Dépannage](#troubleshooting)
 
-## Prerequisites {#prerequisites}
+## Prérequis {#prerequisites}
 
-- **Python 3.6 or higher**
-- **NumPy library** (required for matrix-based algorithms like Floyd-Warshall)
-- Basic understanding of graph theory concepts
+- **Python 3.6 ou supérieur**
+- **Bibliothèque NumPy** (requise pour les algorithmes matriciels comme Floyd-Warshall)
+- Compréhension de base des concepts de théorie des graphes
 
 ## Installation {#installation}
 
-1. Ensure Python 3.6+ is installed on your system
-2. Install the required dependency:
+1. Assurez-vous que Python 3.6+ est installé sur votre système
+2. Installez la dépendance requise :
 
 ```bash
 pip install numpy
 ```
 
-3. Download or copy the `complete_code.py` file to your working directory
+3. Téléchargez ou copiez le fichier `complete_code.py` dans votre répertoire de travail
 
-## Running the Code {#running-the-code}
+## Exécution du Code {#running-the-code}
 
-### Quick Start
+### Démarrage Rapide
 
-Execute the entire test suite to see all algorithms in action:
+Exécutez la suite de tests complète pour voir tous les algorithmes en action :
 
 ```bash
 python complete_code.py
 ```
 
-This will run the `tester_algorithmes()` function, which demonstrates:
-- Dijkstra on a graph with positive weights
-- Bellman-Ford on a graph with negative weights
-- Ford algorithm (optimized Bellman-Ford)
-- Floyd-Warshall for all-pairs shortest paths
+Cela exécutera la fonction `tester_algorithmes()`, qui démontre :
+- Dijkstra sur un graphe avec poids positifs
+- Bellman-Ford sur un graphe avec poids négatifs
+- Algorithme de Ford (Bellman-Ford optimisé)
+- Floyd-Warshall pour les chemins les plus courts toutes paires
 
-### Expected Output
+### Sortie Attendue
 
-The program will display:
-- Graph structures
-- Algorithm results with distances and paths
-- Performance comparisons
-- Warning messages for negative cycles (if detected)
+Le programme affichera :
+- Structures de graphes
+- Résultats des algorithmes avec distances et chemins
+- Comparaisons de performances
+- Messages d'avertissement pour les cycles négatifs (si détectés)
 
-## Using Individual Components {#using-individual-components}
+## Utilisation des Composants Individuels {#using-individual-components}
 
-### 1. Creating a Graph
+### 1. Création d'un Graphe
+
+Pour créer un graphe, importez la classe `Graphe` et ajoutez des arcs avec leurs coûts :
 
 ```python
 from complete_code import Graphe
 
-# Create a graph with 5 vertices (0 to 4)
+# Créer un graphe avec 5 sommets (0 à 4)
 g = Graphe(5)
 
-# Add directed edges with weights
-g.ajouter_arc(0, 1, 4.0)  # Edge from 0 to 1 with cost 4
-g.ajouter_arc(0, 2, 2.0)  # Edge from 0 to 2 with cost 2
-g.ajouter_arc(1, 3, 1.0)  # Edge from 1 to 3 with cost 1
+# Ajouter des arcs dirigés avec des poids
+g.ajouter_arc(0, 1, 4.0)  # Arc de 0 à 1 avec coût 4
+g.ajouter_arc(0, 2, 2.0)  # Arc de 0 à 2 avec coût 2
+g.ajouter_arc(1, 3, 1.0)  # Arc de 1 à 3 avec coût 1
 ```
 
-### 2. Running Dijkstra Algorithm
+**Conseils pour construire un graphe :**
+- Utilisez `Graphe(n)` où `n` est le nombre de sommets
+- Les sommets sont numérotés de 0 à n-1
+- `ajouter_arc(i, j, cout)` ajoute un arc dirigé de i vers j avec le coût spécifié
+- Vous pouvez ajouter plusieurs arcs depuis le même sommet
 
-**Requirements**: All edge weights must be non-negative.
+### 2. Exécution de l'Algorithme de Dijkstra
+
+**Prérequis** : Tous les poids d'arcs doivent être non négatifs.
 
 ```python
 from complete_code import dijkstra, afficher_resultats
 
-# Compute shortest paths from source vertex 0
-distances, predecessors = dijkstra(g, 0)
+# Calculer les chemins les plus courts depuis le sommet source 0
+distances, predecesseurs = dijkstra(g, 0)
 
-# Display results
-afficher_resultats(distances, predecessors, 0, g)
+# Afficher les résultats
+afficher_resultats(distances, predecesseurs, 0, g)
 ```
 
-### 3. Running Bellman-Ford Algorithm
+**Comment utiliser Dijkstra séparément :**
+- Importez `dijkstra` et `afficher_resultats`
+- Appelez `dijkstra(graphe, source)` pour obtenir distances et prédécesseurs
+- Utilisez `afficher_resultats` pour visualiser les résultats
 
-**Use when**: Graph may contain negative edge weights.
+### 3. Exécution de l'Algorithme de Bellman-Ford
+
+**Utilisez quand** : Le graphe peut contenir des poids d'arcs négatifs.
 
 ```python
 from complete_code import bellman_ford
 
-distances, predecessors, has_negative_cycle = bellman_ford(g, 0)
+distances, predecesseurs, cycle_negatif = bellman_ford(g, 0)
 
-if has_negative_cycle:
-    print("Warning: Negative cycle detected!")
+if cycle_negatif:
+    print("Avertissement : Cycle négatif détecté !")
 else:
-    afficher_resultats(distances, predecessors, 0, g)
+    afficher_resultats(distances, predecesseurs, 0, g)
 ```
 
-### 4. Running Ford Algorithm
+**Comment utiliser Bellman-Ford séparément :**
+- Importez `bellman_ford`
+- La fonction retourne aussi un booléen pour détecter les cycles négatifs
+- Vérifiez toujours la présence de cycles négatifs avant d'utiliser les résultats
 
-**Use when**: Optimized version of Bellman-Ford for graphs with negative weights.
+### 4. Exécution de l'Algorithme de Ford
+
+**Utilisez quand** : Version optimisée de Bellman-Ford pour graphes avec poids négatifs.
 
 ```python
 from complete_code import ford
 
-distances, predecessors, has_negative_cycle = ford(g, 0)
+distances, predecesseurs, cycle_negatif = ford(g, 0)
 
-if has_negative_cycle:
-    print("Warning: Negative cycle detected!")
+if cycle_negatif:
+    print("Avertissement : Cycle négatif détecté !")
 else:
-    afficher_resultats(distances, predecessors, 0, g)
+    afficher_resultats(distances, predecesseurs, 0, g)
 ```
 
-### 5. Running Floyd-Warshall Algorithm
+**Comment utiliser Ford séparément :**
+- Importez `ford`
+- Même interface que Bellman-Ford mais souvent plus performant en pratique
 
-**Use when**: Need shortest paths between all pairs of vertices.
+### 5. Exécution de l'Algorithme de Floyd-Warshall
+
+**Utilisez quand** : Besoin des chemins les plus courts entre toutes les paires de sommets.
 
 ```python
 import numpy as np
 from complete_code import floyd_warshall, reconstruire_chemin_floyd
 
-# Create cost matrix (use float('inf') for no edge)
+# Créer matrice de coûts (utilisez float('inf') pour aucun arc)
 INF = float('inf')
-cost_matrix = np.array([
+matrice_couts = np.array([
     [0, 4, 2, INF],
     [INF, 0, 1, 3],
     [INF, INF, 0, 5],
     [INF, INF, INF, 0]
 ])
 
-distances, next_vertices = floyd_warshall(cost_matrix)
+distances, sommets_suivants = floyd_warshall(matrice_couts)
 
-# Get path from vertex 0 to vertex 3
-path = reconstruire_chemin_floyd(next_vertices, 0, 3)
-print(f"Shortest path: {' -> '.join(map(str, path))}")
-print(f"Distance: {distances[0, 3]}")
+# Obtenir le chemin de 0 à 3
+chemin = reconstruire_chemin_floyd(sommets_suivants, 0, 3)
+print(f"Chemin le plus court : {' -> '.join(map(str, chemin))}")
+print(f"Distance : {distances[0, 3]}")
 ```
 
-### 6. Reconstructing Paths
+**Comment utiliser Floyd-Warshall séparément :**
+- Importez `floyd_warshall` et `reconstruire_chemin_floyd`
+- Préparez une matrice de coûts (diagonale à 0, INF pour arcs manquants)
+- Utilisez `reconstruire_chemin_floyd` pour obtenir les chemins spécifiques
 
-For single-source algorithms (Dijkstra, Bellman-Ford, Ford):
+### 6. Reconstruction des Chemins
+
+Pour les algorithmes à source unique (Dijkstra, Bellman-Ford, Ford) :
 
 ```python
 from complete_code import reconstruire_chemin
 
-# Get path from source to target
-path = reconstruire_chemin(predecessors, source, target)
-if path:
-    print(f"Path: {' -> '.join(map(str, path))}")
+# Obtenir le chemin de source à cible
+chemin = reconstruire_chemin(predecesseurs, source, cible)
+if chemin:
+    print(f"Chemin : {' -> '.join(map(str, chemin))}")
 else:
-    print("No path exists")
+    print("Aucun chemin n'existe")
 ```
 
-## Examples {#examples}
+**Comment reconstruire les chemins :**
+- Utilisez `reconstruire_chemin` avec la liste des prédécesseurs
+- Retourne une liste vide si aucun chemin n'existe
 
-### Example 1: Basic Dijkstra Usage
+## Exemples {#examples}
+
+### Exemple 1 : Utilisation Basique de Dijkstra
 
 ```python
 from complete_code import Graphe, dijkstra, afficher_resultats
 
-# Create a simple graph
+# Créer un graphe simple
 g = Graphe(4)
 g.ajouter_arc(0, 1, 1)
 g.ajouter_arc(0, 2, 4)
@@ -168,100 +199,100 @@ g.ajouter_arc(1, 2, 2)
 g.ajouter_arc(1, 3, 5)
 g.ajouter_arc(2, 3, 1)
 
-# Run Dijkstra from vertex 0
-distances, predecessors = dijkstra(g, 0)
-afficher_resultats(distances, predecessors, 0, g)
+# Exécuter Dijkstra depuis le sommet 0
+distances, predecesseurs = dijkstra(g, 0)
+afficher_resultats(distances, predecesseurs, 0, g)
 ```
 
-### Example 2: Handling Negative Weights
+### Exemple 2 : Gestion des Poids Négatifs
 
 ```python
 from complete_code import Graphe, bellman_ford, afficher_resultats
 
-# Create graph with negative weights
+# Créer un graphe avec poids négatifs
 g = Graphe(4)
 g.ajouter_arc(0, 1, 4)
 g.ajouter_arc(0, 2, 2)
-g.ajouter_arc(1, 2, -1)  # Negative weight
+g.ajouter_arc(1, 2, -1)  # Poids négatif
 g.ajouter_arc(2, 3, 1)
 
-# Use Bellman-Ford
-distances, predecessors, has_cycle = bellman_ford(g, 0)
+# Utiliser Bellman-Ford
+distances, predecesseurs, cycle_negatif = bellman_ford(g, 0)
 
-if has_cycle:
-    print("Graph contains a negative cycle")
+if cycle_negatif:
+    print("Le graphe contient un cycle négatif")
 else:
-    afficher_resultats(distances, predecessors, 0, g)
+    afficher_resultats(distances, predecesseurs, 0, g)
 ```
 
-### Example 3: All-Pairs Shortest Paths
+### Exemple 3 : Chemins les Plus Courts Toutes Paires
 
 ```python
 import numpy as np
 from complete_code import floyd_warshall
 
-# Define cost matrix
-costs = np.array([
+# Définir matrice de coûts
+couts = np.array([
     [0, 3, 8, float('inf')],
     [float('inf'), 0, float('inf'), 1],
     [float('inf'), 4, 0, float('inf')],
     [2, float('inf'), -5, 0]
 ])
 
-distances, next_vertices = floyd_warshall(costs)
+distances, sommets_suivants = floyd_warshall(couts)
 
-print("All-pairs distances:")
+print("Distances toutes paires :")
 print(distances)
 ```
 
-## Output Interpretation {#output-interpretation}
+## Interprétation des Sorties {#output-interpretation}
 
-### Distance Values
-- **Finite number**: Shortest path distance from source
-- **`inf`**: Vertex is unreachable from source
-- **Negative number**: Possible with negative weights (Bellman-Ford/Ford)
+### Valeurs de Distance
+- **Nombre fini** : Distance du chemin le plus court depuis la source
+- **`inf`** : Sommet inaccessible depuis la source
+- **Nombre négatif** : Possible avec poids négatifs (Bellman-Ford/Ford)
 
-### Path Reconstruction
-- **Valid path**: List of vertices from source to destination
-- **Empty list**: No path exists between vertices
+### Reconstruction des Chemins
+- **Chemin valide** : Liste de sommets de la source à la destination
+- **Liste vide** : Aucun chemin n'existe entre les sommets
 
-### Algorithm-Specific Messages
-- **"Circuit absorbant détecté"**: Negative cycle found (Bellman-Ford/Ford)
-- **Graph structure display**: Shows all edges and their weights
+### Messages Spécifiques aux Algorithmes
+- **"Circuit absorbant détecté"** : Cycle négatif trouvé (Bellman-Ford/Ford)
+- **Affichage de la structure du graphe** : Montre tous les arcs et leurs poids
 
-### Performance Notes
-- **Dijkstra**: Fastest for positive weights, O((n+m) log n) with heap
-- **Bellman-Ford**: Handles negatives, O(n×m), detects negative cycles
-- **Ford**: Optimized Bellman-Ford, better average performance
-- **Floyd-Warshall**: All-pairs, O(n³), good for dense graphs
+### Notes de Performance
+- **Dijkstra** : Le plus rapide pour poids positifs, O((n+m) log n) avec tas
+- **Bellman-Ford** : Gère les négatifs, O(n×m), détecte les cycles négatifs
+- **Ford** : Bellman-Ford optimisé, meilleures performances moyennes
+- **Floyd-Warshall** : Toutes paires, O(n³), bon pour graphes denses
 
-## Troubleshooting {#troubleshooting}
+## Dépannage {#troubleshooting}
 
-### Common Issues
+### Problèmes Courants
 
-1. **Import Error**: Ensure `complete_code.py` is in your Python path
-2. **NumPy Not Found**: Install with `pip install numpy`
-3. **Infinite Loop**: Check for negative cycles in Bellman-Ford/Ford
-4. **Wrong Results**: Verify graph construction and edge directions
+1. **Erreur d'Importation** : Assurez-vous que `complete_code.py` est dans votre chemin Python
+2. **NumPy Non Trouvé** : Installez avec `pip install numpy`
+3. **Boucle Infinie** : Vérifiez les cycles négatifs dans Bellman-Ford/Ford
+4. **Résultats Incorrects** : Vérifiez la construction du graphe et les directions des arcs
 
-### Algorithm Selection Guide
+### Guide de Sélection d'Algorithme
 
-| Scenario | Recommended Algorithm |
+| Scénario | Algorithme Recommandé |
 |----------|----------------------|
-| Positive weights only | Dijkstra |
-| May have negative weights | Bellman-Ford or Ford |
-| Need all pairs shortest paths | Floyd-Warshall |
-| Large sparse graph | Dijkstra |
-| Dense graph | Floyd-Warshall |
-| Must detect negative cycles | Bellman-Ford or Ford |
+| Poids positifs uniquement | Dijkstra |
+| Peut avoir des poids négatifs | Bellman-Ford ou Ford |
+| Besoin de chemins les plus courts toutes paires | Floyd-Warshall |
+| Grand graphe clairsemé | Dijkstra |
+| Graphe dense | Floyd-Warshall |
+| Doit détecter les cycles négatifs | Bellman-Ford ou Ford |
 
-### Performance Tips
+### Conseils de Performance
 
-- Use Dijkstra when possible (fastest for positive weights)
-- For negative weights, Ford often performs better than Bellman-Ford
-- Floyd-Warshall is ideal when you need all pairs (not just single source)
-- Consider graph size: Floyd-Warshall may be slow for n > 1000
+- Utilisez Dijkstra quand possible (le plus rapide pour poids positifs)
+- Pour poids négatifs, Ford fonctionne souvent mieux que Bellman-Ford
+- Floyd-Warshall est idéal quand vous avez besoin de toutes paires (pas seulement source unique)
+- Considérez la taille du graphe : Floyd-Warshall peut être lent pour n > 1000
 
 ## Conclusion
 
-This implementation provides a complete toolkit for shortest path problems. Start with the test function to understand the algorithms, then adapt the individual functions for your specific use cases. Remember to choose the appropriate algorithm based on your graph's characteristics (weights, density, requirements).
+Cette implémentation fournit une boîte à outils complète pour les problèmes de chemins les plus courts. Commencez par la fonction de test pour comprendre les algorithmes, puis adaptez les fonctions individuelles pour vos cas d'usage spécifiques. N'oubliez pas de choisir l'algorithme approprié basé sur les caractéristiques de votre graphe (poids, densité, exigences).

@@ -47,7 +47,7 @@ def creer_graphe_exemple_2() -> Graphe:
 
 def tester_algorithmes():
     print("=" * 70)
-    print("TEST 1: Dijkstra sur graphe avec coûts positifs")
+    print("TEST 1 : Dijkstra sur graphe à coûts positifs")
     print("=" * 70)
     g1 = creer_graphe_exemple_1()
     g1.afficher()
@@ -55,27 +55,27 @@ def tester_algorithmes():
     afficher_resultats(lambda_vals, predecesseurs, 0, g1)
 
     print("\n" + "=" * 70)
-    print("TEST 2: Bellman-Ford sur graphe avec coûts négatifs")
+    print("TEST 2 : Bellman-Ford sur graphe à coûts négatifs")
     print("=" * 70)
     g2 = creer_graphe_exemple_2()
     g2.afficher()
     lambda_vals, predecesseurs, circuit = bellman_ford(g2, 0)
     if circuit:
-        print("\n⚠️  ATTENTION: Circuit absorbant détecté!")
+        print("\n⚠️  ATTENTION : circuit absorbant détecté !")
     else:
         afficher_resultats(lambda_vals, predecesseurs, 0, g2)
 
     print("\n" + "=" * 70)
-    print("TEST 3: Ford sur le même graphe")
+    print("TEST 3 : Ford sur le même graphe")
     print("=" * 70)
     lambda_vals, predecesseurs, circuit = ford(g2, 0)
     if circuit:
-        print("\n⚠️  ATTENTION: Circuit absorbant détecté!")
+        print("\n⚠️  ATTENTION : circuit absorbant détecté !")
     else:
         afficher_resultats(lambda_vals, predecesseurs, 0, g2)
 
     print("\n" + "=" * 70)
-    print("TEST 4: Floyd-Warshall")
+    print("TEST 4 : Floyd-Warshall")
     print("=" * 70)
     INF = float('inf')
     matrice = np.array([

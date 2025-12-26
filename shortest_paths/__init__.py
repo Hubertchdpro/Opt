@@ -1,4 +1,4 @@
-"""shortest_paths package exposing graph structures and algorithms."""
+"""Package shortest_paths exposant les structures de graphe et les algorithmes."""
 from .graph import Graphe
 from .algorithms import (
     dijkstra,
