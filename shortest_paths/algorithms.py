@@ -142,10 +142,23 @@ def floyd_warshall(matrice_couts: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
 
 
 def reconstruire_chemin_floyd(suivants: np.ndarray, i: int, j: int) -> List[int]:
+    n = suivants.shape[0]
     if suivants[i, j] == -1:
         return []
     chemin = [i]
-    while i != j:
-        i = suivants[i, j]
+    steps = 0
+    # Défensive: limiter le nombre d'itérations à n pour éviter les boucles infinies
+    while i != j and steps < n:
+        next_v = suivants[i, j]
+        if next_v == -1:
+            return []
+        # Si la reconstruction ne progresse pas, sortir
+        if next_v == i:
+            return []
+        i = next_v
         chemin.append(i)
+        steps += 1
+
+    if i != j:
+        return []
     return chemin
